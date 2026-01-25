@@ -1,0 +1,132 @@
+<!-- ステップインジケーター -->
+<div class="mb-8">
+  <div class="flex items-center justify-between">
+    <div class="flex flex-col items-center flex-1">
+      <div class="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+      </div>
+      <span class="mt-2 text-sm font-medium text-green-600">日付選択</span>
+    </div>
+    <div class="flex-1 h-1 bg-green-600"></div>
+    <div class="flex flex-col items-center flex-1">
+      <div class="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+      </div>
+      <span class="mt-2 text-sm font-medium text-green-600">時間選択</span>
+    </div>
+    <div class="flex-1 h-1 bg-blue-600"></div>
+    <div class="flex flex-col items-center flex-1">
+      <div class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">
+        3
+      </div>
+      <span class="mt-2 text-sm font-medium text-blue-600">情報入力</span>
+    </div>
+  </div>
+</div>
+
+<!-- 選択された日時の表示 -->
+<div class="mb-6">
+  <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+    <p class="text-sm text-blue-800">
+      <span class="font-semibold">予約日時:</span>
+      <%= l(@appointment.appointed_on, format: :long) %> <%= Appointment.appointed_slots[@appointment.appointed_slot] %>
+    </p>
+  </div>
+</div>
+
+<!-- 入力フォーム -->
+<div>
+  <h2 class="text-xl font-semibold mb-6">患者情報を入力してください</h2>
+
+  <%= form_with model: @appointment, url: appointments_path, data: { controller: "form-validation" } do |f| %>
+    <%= f.hidden_field :appointed_on, value: @appointment.appointed_on %>
+    <%= f.hidden_field :appointed_slot, value: @appointment.appointed_slot %>
+
+    <!-- エラーメッセージ -->
+    <% if @appointment.errors.any? %>
+      <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+        <h3 class="text-red-800 font-semibold mb-2">入力内容にエラーがあります</h3>
+        <ul class="list-disc list-inside text-red-700 text-sm">
+          <% @appointment.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="space-y-6">
+      <!-- 名前 -->
+      <div>
+        <%= f.label :name, "お名前", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.text_field :name,
+            class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
+            placeholder: "山田 太郎" %>
+      </div>
+
+      <!-- ふりがな -->
+      <div>
+        <%= f.label :name_kana, "ふりがな", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.text_field :name_kana,
+            class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
+            placeholder: "やまだ たろう",
+            data: {
+              form_validation_target: "nameKana",
+              action: "input->form-validation#validateKana"
+            } %>
+        <p class="mt-1 text-sm text-red-600 hidden" data-form-validation-target="nameKanaError"></p>
+      </div>
+
+      <!-- 診察券番号 -->
+      <div>
+        <%= f.label :patient_number, "診察券番号", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <span class="text-xs text-gray-500">(お持ちの方のみ)</span>
+        <%= f.text_field :patient_number,
+            class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
+            placeholder: "1234567" %>
+      </div>
+
+      <!-- 生年月日 -->
+      <div>
+        <%= f.label :birth_date, "生年月日", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.date_field :birth_date,
+            class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+      </div>
+
+      <!-- 電話番号 -->
+      <div>
+        <%= f.label :phone_number, "電話番号", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.telephone_field :phone_number,
+            class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
+            placeholder: "090-1234-5678",
+            data: {
+              form_validation_target: "phoneNumber",
+              action: "input->form-validation#validatePhone"
+            } %>
+        <p class="mt-1 text-sm text-red-600 hidden" data-form-validation-target="phoneError"></p>
+      </div>
+
+      <!-- 診療目的 -->
+      <div>
+        <%= f.label :consultation_purpose, "診療目的", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= f.select :consultation_purpose,
+            Appointment::CONSULTATION_PURPOSES,
+            { prompt: "選択してください" },
+            class: "w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" %>
+      </div>
+    </div>
+
+    <!-- 送信ボタン -->
+    <div class="mt-8 flex gap-4">
+      <%= link_to "時間を選び直す",
+          new_appointment_path(date: @appointment.appointed_on),
+          class: "px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition" %>
+
+      <%= f.submit "予約する",
+          class: "flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold" %>
+    </div>
+  <% end %>
+</div>

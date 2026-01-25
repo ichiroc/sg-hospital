@@ -1,0 +1,54 @@
+ja:
+  date:
+    formats:
+      default: "%Y年%m月%d日"
+      long: "%Y年%m月%d日(%a)"
+      short: "%m/%d"
+    abbr_day_names:
+      - 日
+      - 月
+      - 火
+      - 水
+      - 木
+      - 金
+      - 土
+    day_names:
+      - 日曜日
+      - 月曜日
+      - 火曜日
+      - 水曜日
+      - 木曜日
+      - 金曜日
+      - 土曜日
+  time:
+    formats:
+      default: "%Y年%m月%d日 %H:%M"
+      long: "%Y年%m月%d日 %H時%M分%S秒"
+      short: "%m/%d %H:%M"
+  activerecord:
+    models:
+      appointment: 予約
+    attributes:
+      appointment:
+        appointed_on: 予約日
+        appointed_slot: 予約時間
+        name: お名前
+        name_kana: ふりがな
+        patient_number: 診察券番号
+        birth_date: 生年月日
+        phone_number: 電話番号
+        consultation_purpose: 診療目的
+    errors:
+      models:
+        appointment:
+          attributes:
+            name:
+              blank: を入力してください
+            name_kana:
+              blank: を入力してください
+            birth_date:
+              blank: を入力してください
+            phone_number:
+              blank: を入力してください
+            consultation_purpose:
+              blank: を選択してください

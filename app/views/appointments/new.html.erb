@@ -1,0 +1,9 @@
+<div class="bg-white shadow rounded-lg p-6 max-w-4xl mx-auto">
+  <% if @appointment.appointed_slot.nil? %>
+    <!-- ステップ2: 時間枠選択 -->
+    <%= render "step2_slot_selection" %>
+  <% else %>
+    <!-- ステップ3: 入力フォーム -->
+    <%= render "step3_input_form" %>
+  <% end %>
+</div>

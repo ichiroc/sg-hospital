@@ -1,1 +1,40 @@
 @import "tailwindcss";
+
+/* Simple Calendar のカスタムスタイル */
+.simple-calendar {
+  @apply w-full;
+}
+
+.simple-calendar table {
+  @apply w-full border-collapse;
+}
+
+.simple-calendar .day {
+  @apply h-24 border border-gray-200 p-2 align-top;
+}
+
+.simple-calendar .wday-0 {
+  @apply bg-red-50;
+}
+
+.simple-calendar .wday-6 {
+  @apply bg-blue-50;
+}
+
+.simple-calendar .today {
+  @apply bg-yellow-100;
+}
+
+.simple-calendar .prev-month,
+.simple-calendar .next-month {
+  @apply bg-gray-100 text-gray-400;
+}
+
+.simple-calendar .day:hover {
+  @apply bg-blue-100 cursor-pointer;
+}
+
+.simple-calendar .prev-month:hover,
+.simple-calendar .next-month:hover {
+  @apply bg-gray-100 cursor-not-allowed;
+}

@@ -24,6 +24,9 @@ gem "jbuilder"
 gem 'activeagent'
 gem 'openai'
 
+# Simple Calendar for appointment booking
+gem 'simple_calendar', '~> 3.0'
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 

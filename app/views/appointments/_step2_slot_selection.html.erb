@@ -1,0 +1,90 @@
+<!-- ステップインジケーター -->
+<div class="mb-8">
+  <div class="flex items-center justify-between">
+    <div class="flex flex-col items-center flex-1">
+      <div class="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+      </div>
+      <span class="mt-2 text-sm font-medium text-green-600">日付選択</span>
+    </div>
+    <div class="flex-1 h-1 bg-blue-600"></div>
+    <div class="flex flex-col items-center flex-1">
+      <div class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">
+        2
+      </div>
+      <span class="mt-2 text-sm font-medium text-blue-600">時間選択</span>
+    </div>
+    <div class="flex-1 h-1 bg-gray-200"></div>
+    <div class="flex flex-col items-center flex-1">
+      <div class="w-10 h-10 bg-gray-200 text-gray-500 rounded-full flex items-center justify-center font-semibold">
+        3
+      </div>
+      <span class="mt-2 text-sm text-gray-500">情報入力</span>
+    </div>
+  </div>
+</div>
+
+<!-- 選択された日付の表示 -->
+<div class="mb-6">
+  <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+    <p class="text-sm text-blue-800">
+      <span class="font-semibold">選択日:</span>
+      <%= l(@appointment.appointed_on, format: :long) %>
+    </p>
+  </div>
+</div>
+
+<!-- 時間枠選択 -->
+<div class="mb-6">
+  <h2 class="text-xl font-semibold mb-4">予約時間を選択してください</h2>
+
+  <% available_slots = Appointment.available_slots_for(@appointment.appointed_on) %>
+  <% morning_slots = available_slots.select { |_k, v| Time.parse(v) < Time.parse("12:00") } %>
+  <% afternoon_slots = available_slots.select { |_k, v| Time.parse(v) >= Time.parse("15:00") } %>
+
+  <% if available_slots.any? %>
+    <div data-controller="slot-selector">
+      <!-- 午前枠 -->
+      <% if morning_slots.any? %>
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold mb-3 text-gray-700">午前（9:00〜12:00）</h3>
+          <div class="grid grid-cols-4 gap-3">
+            <% morning_slots.each do |key, value| %>
+              <%= link_to value,
+                  new_appointment_path(date: @appointment.appointed_on, slot: value),
+                  class: "py-3 px-4 border-2 border-blue-500 text-blue-700 rounded-lg text-center font-medium hover:bg-blue-50 transition",
+                  data: { slot_selector_target: "slot", action: "click->slot-selector#select" } %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <!-- 午後枠 -->
+      <% if afternoon_slots.any? %>
+        <div>
+          <h3 class="text-lg font-semibold mb-3 text-gray-700">午後（15:00〜17:00）</h3>
+          <div class="grid grid-cols-4 gap-3">
+            <% afternoon_slots.each do |key, value| %>
+              <%= link_to value,
+                  new_appointment_path(date: @appointment.appointed_on, slot: value),
+                  class: "py-3 px-4 border-2 border-blue-500 text-blue-700 rounded-lg text-center font-medium hover:bg-blue-50 transition",
+                  data: { slot_selector_target: "slot", action: "click->slot-selector#select" } %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+      <p class="text-yellow-800">申し訳ございません。選択された日付には予約可能な時間枠がございません。</p>
+    </div>
+  <% end %>
+</div>
+
+<!-- 戻るボタン -->
+<div class="mt-6">
+  <%= link_to "日付を選び直す", appointments_path,
+      class: "inline-block px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition" %>
+</div>

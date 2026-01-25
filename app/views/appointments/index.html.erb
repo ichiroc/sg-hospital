@@ -1,0 +1,39 @@
+<div class="bg-white shadow rounded-lg p-6 max-w-5xl mx-auto">
+  <!-- ステップインジケーター -->
+  <div class="mb-8">
+    <div class="flex items-center justify-between">
+      <div class="flex flex-col items-center flex-1">
+        <div class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-semibold">
+          1
+        </div>
+        <span class="mt-2 text-sm font-medium text-blue-600">日付選択</span>
+      </div>
+      <div class="flex-1 h-1 bg-gray-200"></div>
+      <div class="flex flex-col items-center flex-1">
+        <div class="w-10 h-10 bg-gray-200 text-gray-500 rounded-full flex items-center justify-center font-semibold">
+          2
+        </div>
+        <span class="mt-2 text-sm text-gray-500">時間選択</span>
+      </div>
+      <div class="flex-1 h-1 bg-gray-200"></div>
+      <div class="flex flex-col items-center flex-1">
+        <div class="w-10 h-10 bg-gray-200 text-gray-500 rounded-full flex items-center justify-center font-semibold">
+          3
+        </div>
+        <span class="mt-2 text-sm text-gray-500">情報入力</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- カレンダー -->
+  <div class="mt-8">
+    <h2 class="text-xl font-semibold mb-4 text-center">予約日を選択してください</h2>
+    <%= month_calendar do |date| %>
+      <% if date >= Date.today %>
+        <%= link_to date.day, new_appointment_path(date: date), class: "block text-center font-semibold text-blue-600 hover:bg-blue-200 rounded p-1" %>
+      <% else %>
+        <div class="text-center text-gray-400"><%= date.day %></div>
+      <% end %>
+    <% end %>
+  </div>
+</div>
