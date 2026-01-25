@@ -1,9 +1,10 @@
 class WebBrowserAgent < ApplicationAgent
-  def order
+  def order(message)
+    @message = message
     prompt(
       #input: "瀬戸市のスシローの予約をしてみてください。明日の12:00 の予約を中谷でしたいです。このページです。 https://www.akindo-sushiro.co.jp/ ",
       #input: "瀬戸市のくら寿司の予約をしてみてください。明日の12:00 の予約を中谷でしたいです。このページです。 https://www.kurasushi.co.jp/ ",
-      input: '瀬戸市のこだま耳鼻科のホームページのURLをWeb検索してください',
+      #input: '瀬戸市のこだま耳鼻科のホームページのURLをWeb検索してください',
       #input: "このURLのサイトで、ソニックガーデンの経営者として大切にしてるものを聞いてみてください。 https://kuragpt.app.ichiroc.in/ ページが開けない場合はスクリーンショットを保存し、その理由も調べてください。",
       #input: "URLで渡したサイトからたどって、HTMLの input 要素の radio ボタンについて概要文を抜き出してください。 https://developer.mozilla.org/ja/docs/Web",
       max_retries: 15,
