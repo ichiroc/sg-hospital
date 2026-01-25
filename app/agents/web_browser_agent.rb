@@ -2,7 +2,8 @@ class WebBrowserAgent < ApplicationAgent
   def order
     prompt(
       #input: "瀬戸市のスシローの予約をしてみてください。明日の12:00 の予約を中谷でしたいです。このページです。 https://www.akindo-sushiro.co.jp/ ",
-      input: "瀬戸市のくら寿司の予約をしてみてください。明日の12:00 の予約を中谷でしたいです。このページです。 https://www.kurasushi.co.jp/ ",
+      #input: "瀬戸市のくら寿司の予約をしてみてください。明日の12:00 の予約を中谷でしたいです。このページです。 https://www.kurasushi.co.jp/ ",
+      input: '瀬戸市のこだま耳鼻科のホームページのURLをWeb検索してください',
       #input: "このURLのサイトで、ソニックガーデンの経営者として大切にしてるものを聞いてみてください。 https://kuragpt.app.ichiroc.in/ ページが開けない場合はスクリーンショットを保存し、その理由も調べてください。",
       #input: "URLで渡したサイトからたどって、HTMLの input 要素の radio ボタンについて概要文を抜き出してください。 https://developer.mozilla.org/ja/docs/Web",
       max_retries: 15,
@@ -107,9 +108,36 @@ class WebBrowserAgent < ApplicationAgent
           #     },
           #     required: [ "path" ]
           #   }
-          # }
+          # },
+          {
+            name: "web_search",
+            description: "Web検索を実行して、最新の情報を取得します。",
+            parameters: {
+              type: "object",
+              properties: {
+                query: { type: "string", description: "検索クエリを指定します。例: '瀬戸市 こだま耳鼻科'" }
+              },
+              required: [ "query" ]
+            }
+          }
         ]
     )
+  end
+
+  def web_search(query:)
+    client = OpenAI::Client.new(api_key: ENV.fetch('OPENAI_API_KEY'))
+
+    response = client.responses.create(
+      model: "gpt-4o",
+      input: query,
+      tools: [
+        { type: "web_search" }
+      ]
+    )
+
+    # NOTE: output の最後に検索結果が入っている( first は検索指示 )
+    # text はAIがまとめた情報でURLを含む。
+    response.output.last.content.first.text
   end
 
   def open_url(url:)
