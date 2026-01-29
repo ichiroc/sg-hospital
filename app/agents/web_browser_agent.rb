@@ -130,7 +130,7 @@ class WebBrowserAgent < ApplicationAgent
 
     response = client.responses.create(
       model: "gpt-4o",
-      input: query,
+      input: "#{query}\n結果には必ずURLを含めてください。",
       tools: [
         { type: "web_search" }
       ]
