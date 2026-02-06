@@ -51,7 +51,6 @@ class Appointment < ApplicationRecord
   }
 
   validate :appointed_on_cannot_be_in_the_past
-  validate :birth_date_cannot_be_in_the_future
   validate :appointment_slot_must_be_available
 
   # 指定日の利用可能な時間枠を取得
@@ -65,12 +64,6 @@ class Appointment < ApplicationRecord
   def appointed_on_cannot_be_in_the_past
     if appointed_on.present? && appointed_on < Date.today
       errors.add(:appointed_on, "は今日以降の日付を選択してください")
-    end
-  end
-
-  def birth_date_cannot_be_in_the_future
-    if birth_date.present? && birth_date > Date.today
-      errors.add(:birth_date, "は過去の日付を入力してください")
     end
   end
 
