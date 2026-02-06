@@ -41,7 +41,6 @@ class Appointment < ApplicationRecord
     with: /\A[ぁ-んー\s]+\z/,
     message: "はひらがなで入力してください"
   }
-  validates :birth_date, presence: true
   validates :phone_number, presence: true, format: {
     with: /\A\d{2,4}-?\d{2,4}-?\d{4}\z/,
     message: "は正しい形式で入力してください（例: 090-1234-5678）"
